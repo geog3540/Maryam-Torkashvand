@@ -96,12 +96,12 @@
 
 			<div class="row">
 				<div class="col-sm-6">
-					<h3 class='mapTitle'>Income Ratio</h3><p>Ratio of household income at the 80th percentile to income at the 20th percentile.</p>
+					<h3 class='mapTitle'>Urban Population</h3><p>Percentage of population who live in urban areas.</p>
 					<div id="divMap3"></div>
 					<div id="divHist3"></div>
 				</div>
 				<div class="col-sm-6">
-					<h3 class='mapTitle'>Unemployment</h3><p>Percentage of population ages over 16 who are unemployed.</p>
+					<h3 class='mapTitle'>White Population</h3><p>Percentage of white population for each county.</p>
 					<div id="divMap4"></div>
 					<div id="divHist4"></div>
 				</div>
@@ -143,20 +143,20 @@
 	// https://observablehq.com/@d3/d3-format
 	var att1 = 'Adults_Obe', att1alias = '% Adults with obesity', att1format = '.1f',
 	att2 = 'Access_Exe', att2alias =  '% Access to exercise', att2format = '.1f',
-	att3 = 'Income_Rat', att3alias = 'Income ratio', att3format = '.2f',
-	att4 = 'Unemployed', att4alias = '% Unemployed', att4format = '.1f';
+	att3 = 'UrbanPop', att3alias = '% Urban Population', att3format = '.1f',
+	att4 = 'WhitePop', att4alias = '% White population', att4format = '.1f';
 
   // enter below all variables that should be normalized. If you woud like to multiple the variables
 	// with a constant value enter them in multiplyBy array. If there is no need for multiplication,
 	// simply enter 1 for each value in multiplyBy.
-  //var attributesToBeNormalized = [att1, att4];
-	//var multiplyBy = [1, 1];
-	//var divideBy = ['Population', 'Population'];
+  var attributesToBeNormalized = [att3, att4];
+	var multiplyBy = [100, 100];
+	var divideBy = ['TotalPop', 'TotalPop'];
 	// if your variables are not raw counts and they are already normalized, comment out above, and
 	//uncomment below:
-	 var attributesToBeNormalized = [];
-	 var multiplyBy = [];
-	 var divideBy = [];
+	//var attributesToBeNormalized = [];
+	//var multiplyBy = [];
+	//var divideBy = [];
 
 	//DO NOT CHANGE ANYTHING BELOW THIS POINT UNLESS YOU KNOW WHAT YOU ARE DOING
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -364,12 +364,11 @@
 						panel.select('.legendQuant').call(holdLegend.scale(current_scale));
 
 						// add north arrow
-						// panel
-						// .append('path')
-						// .attr('id', 'arrow')
-						// .attr("d", "M 6 0 12 12 6 9 0 12")
-						// .attr('fill', "black")
-						// .attr("transform", "translate(" + margin.left + "," + margin.top + ") rotate("+ 0 +")");
+						//panel.append('path')
+						//.attr('id', 'arrow')
+						//.attr("d", "M 6 0 12 12 6 9 0 12")
+						//.attr('fill', "black")
+						//.attr("transform", "translate(" + margin.left + "," + margin.botto + ") rotate("+ 0 +")");
 
 					}); // end for each
 				});
