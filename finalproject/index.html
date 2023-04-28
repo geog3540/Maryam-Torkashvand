@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Community Detection Maps</title>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <style>
+  .map {
+    display: inline-block;
+    border: 1px solid black;
+  }
+  </style>
+</head>
+<body>
+  <svg id="map1" class="map" width="960" height="600"></svg>
+  <svg id="map2" class="map" width="960" height="600"></svg>
+  <script>
+    function pairCountingSimilarity(communities1, communities2) {
+      if (communities1.length !== communities2.length) {
+        throw new Error("Input arrays must have the same length");
+      }
+
+      let matches = 0;
+      let totalPairs = 0;
+
+      for (let i = 0; i < communities1.length; i++) {
+        for (let j = i + 1; j < communities1.length; j++) {
+          totalPairs++;
+
+          if (communities1[i] === communities1[j] && communities2[i] === communities2[j]) {
+            matches++;
+          }
+        }
+      }
+
+      return matches / totalPairs;
+    }
+
+    var projection = d3.geoAlbersUsa();
+    var path = d3.geoPath().projection(projection);
+    var colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
+    d3.json("data/louvain.geojson").then(function(geoJsonData1) {
+      d3.json("data/leiden.geojson").then(function(geoJsonData2) {
+        const partitions1 = geoJsonData1.features.map(feature => feature.properties.leidenpart);
+        const partitions2 = geoJsonData2.features.map(feature => feature.properties.louvainpar);
+
+        const similarity = pairCountingSimilarity(partitions1, partitions2);
+        console.log("Pair counting similarity:", similarity);
+
+        var svg1 = d3.select("#map1");
+        svg1.selectAll("path")
+          .data(geoJsonData1.features)
+          .join("path")
+          .attr("d", path)
+          .attr("fill", function(d) {
+            return colorScale(d.properties.leidenpart);
+          })
+          .attr("stroke", "white")
+          .attr("stroke-width", 1);
+
+        var svg2 = d3.select("#map2");
+        svg2.selectAll("path")
+          .data(geoJsonData2.features)
+          .join("path")
+          .attr("d", path)
+          .attr("fill", function(d) {
+            return colorScale(d.properties.louvainpar);
+          })
+          .attr("stroke", "white")
+          .attr("stroke-width", 1);
+      });
+    });
+  </script>
+</body>
+</html>
