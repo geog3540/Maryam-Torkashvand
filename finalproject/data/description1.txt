@@ -1,0 +1,2 @@
+The modularity is 0.06091525884068864
+The number of partitions is 5

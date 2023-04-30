@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--bootstrap loading-->
+  <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">-->
+
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="css/3-col-portfolio.css" rel="stylesheet">
+  <!--loading d3-->
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+
+  <title>migrationstructures</title>
+
+  <style>
+
+  /*some basic styling*/
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  /*style for header and navigation*/
+  .header {
+    background-color: #14365D;
+    padding: 1rem;
+  }
+  .header h1 {
+    color: #fff;
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  .nav {
+    display: flex;
+    justify-content: flex-end;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav li {
+    display: inline-block;
+    margin-left: 1rem;
+  }
+  .nav a {
+    color: #fff;
+    text-decoration: none;
+  }
+
+  /* Style for project description */
+  .description {
+    background-color: #f5f5f5;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  /*containers style*/
+  .container {
+    padding: 20px;
+  }
+  /*defining style and size for map containers, so we can have map grid*/
+  .map-container {
+    position: relative;
+    display: inline-block;
+    margin: 20px auto;
+    width: calc(50% - 20px); /* 50% width for 2 columns, minus 20px for margin */
+  }
+  /*style for compre drop down bottom*/
+  .compare-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 10;
+  }
+  /*style for the text under each map for descriptions*/
+  .map-description {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 400px;
+    border: 1px solid #ccc;
+    background-color: #f2f2f2;
+    font-size: 14px;
+    text-align: justify;
+  }
+
+  /* style for footer */
+  .footer {
+    background-color: #14365D;
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+    margin-top: 1rem;
+  }
+  </style>
+</head>
+
+<!--Defining the navigation, header and description, ...-->
+<body>
+  <header class="header">
+    <h1>Migration Structures in United States (1910-1920)</h1>
+    <ul class="nav">
+      <li><a href="../index.html">Portfolio</a></li>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">My C.V.</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </header>
+
+  <div class="container">
+    <h1>Migration Structures in the United States (1910-1920)</h1>
+  </div>
+  <div class="description text-center">
+    <p>Mapping migration regions using two network community detection algorithms. The visualization method employed ensures consistency by maintaining the same color for each region across both maps, allowing for easier comparison and interpretation</p>
+  </div>
+
+  <!--Map Grid: Maps are shown here-->
+  <div class="row">
+    <div id="mapGrid" class="row">
+    </div>
+  </div>
+
+  <footer class="footer">
+    Copyright &copy; Maryam Torkashvand 2023
+  </footer>
+
+<!--Definnig functions and variables inside script. everything we want to append pr all functions are defined inside script-->
+<script>
+
+//a function that extracts communities from geojson files and make an array
+//each element of this array is a community of each maps
+//we use this array to calculate PaircountSimilarity later
+//the name of community attribute (the name of the column that shows the partitions) must be same in all maps
+//So for each map in each year and each method we need to have one geojson file with a column name "partition"
+//!!"liedenpart" should be updated!!
+async function getCommunitiesFromGeoJSON(filePaths) {
+  const communities = [];
+
+  for (const filePath of filePaths) {
+    const response = await fetch(filePath);
+    const geoJsonData = await response.json();
+    const community = geoJsonData.features.map(feature => feature.properties.leidenpart);
+    communities.push(community);
+  }
+
+  return communities;
+}
+
+//this function calculate the paircointing similarity between maps
+function pairCountingSimilarity(communities1, communities2) {
+  if (communities1.length !== communities2.length) {
+    throw new Error("Input arrays must have the same length");
+  }
+
+  //initialize the variables
+  let matches = 0;
+  let totalPairs = 0;
+
+  //define the unique pairs of nodes (0,1),(0,2), ... (n-1,n)
+  for (let i = 0; i < communities1.length; i++) {
+    for (let j = i + 1; j < communities1.length; j++) {
+      totalPairs++;
+
+      //chech whether those pairs that are in a same community in network 1 also are the same community in network 2
+      //if true, add 1 to the match variable
+      if (communities1[i] === communities1[j] && communities2[i] === communities2[j]) {
+        matches++;
+      }
+    }
+  }
+  return matches / totalPairs;
+}
+
+  // this function draw all maps in a specific size and put them in the grid
+  function drawMap(mapId, geoJsonData, partitionAttribute, colorScale) {
+    const width = 600;
+    const height = 410;
+    const projection = d3.geoAlbersUsa().scale(500).translate([width / 2, height / 2]);
+    const path = d3.geoPath().projection(projection);
+    // add each map
+    const svg = d3.select("#" + mapId)
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height);
+    // fill the map based on partitionAttribute
+    //also look at the table of maps and extract id and partition for hover over function
+    svg.selectAll("path")
+    .data(geoJsonData.features)
+    .join("path")
+    .attr("d", path)
+    .attr("fill", d => colorScale(d.properties[partitionAttribute]))
+    .attr("stroke", "white")
+    .attr("stroke-width", 1)
+    .on("mouseover", function (event, d) {
+      d3.select(this)
+      .append("title")
+      .text(`ID: ${d.id},Partition: ${d.properties[partitionAttribute]}`);
+    })
+    .on("mouseout", function () {
+      d3.select(this)
+      .selectAll("title")
+      .remove();;
+      });
+    }
+
+  //definning colorscheme
+  const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
+  // List of GeoJSON file paths. this list store the maps geojson files
+  const mapFiles = [
+    "data/louvain.geojson", "data/leiden.geojson","data/leiden1900_1910.geojson", "data/Louvain1900_1910.geojson"
+  ];
+
+  //initialling a dictionary that stores all similarity values beetween all map pairs
+  //So we can call the similarity and show them for the compare values
+  //let make the variable global so we can use it outside of the function
+  let similarityDictionary = {};
+
+  //this function extract communities from geojson files
+  //calculate paircounting similarity
+  //and store it in a dictionart and print it on the console
+  getCommunitiesFromGeoJSON(mapFiles).then(communities => {
+    console.log("Communities array:", communities);
+    //initializing dict
+    const similarityDict = {};
+    //for all communities from files fill the dict by key:index of two maps and value:similarity
+    for (let i = 0; i < communities.length; i++) {
+      for (let j = i + 1; j < communities.length; j++) {
+        const key = `${i}-${j}`;
+        const similarityScore = pairCountingSimilarity(communities[i], communities[j]);
+        similarityDict[key] = similarityScore;
+      }
+    }
+    similarityDictionary = similarityDict;
+    console.log("Similarity dictionary:", similarityDictionary);
+  });
+
+  //this list stores text files that has descriptions for each map
+  //like madularity, number of regions and a brief description
+  //!!add text files for all maps and name of them must be "description[i]"
+  const descriptionFiles = [
+    "data/description1.txt",
+  ];
+
+  //this code make an access to each mapgrid, so we cam manupulate interval
+  //here add description box to each grid
+  const mapGrid = document.getElementById("mapGrid");
+
+  //This function read and load the text files and format it to paragraph
+  function loadDescription(filename, mapContainer) {
+    d3.text(filename).then(function (text) {
+      const paragraphs = text.split("\n\n");
+      paragraphs.forEach(function (paragraph) {
+        if (paragraph.trim() !== "") {
+          mapContainer.append("p")
+          .attr("class", "map-description")
+          .text(paragraph);
+        }
+      });
+    });
+  }
+/////////////////////////////////////////////////////////////////////////////////
+  //Now definning a foe loop that define attributes for all elemets of each Grid
+  //and draw maps, discription, compare bottom in each grid
+
+  for (let i = 0; i < mapFiles.length; i++) {
+    const mapId = "map" + i;
+    const mapContainer = d3.select("#mapGrid")
+    .append("div")
+    .attr("class", "col-md-4 map-container");
+
+    mapContainer.append("div")
+    .attr("id", mapId)
+    .attr("class", "map");
+
+    // This code creats dropdown bottoms
+    const dropdown = mapContainer.append("select")
+    .attr("class", "form-control compare-dropdown")
+
+    // for each drop down define options.
+    // foe each map the options are all other maps (j !== i)
+    for (let j = 0; j < mapFiles.length; j++) {
+      if (j !== i) {
+        dropdown.append("option")
+        .attr("value", j)
+        .text("Compare with Map " + (j + 1));
+      }
+    }
+
+    // definnig the drop down functionality
+    //first defining key and value variables from similarity dictionary
+    //then define an alert window that shows the similarity between the map and selected option
+    dropdown.on("change", function () {
+      const selectedMapIndex = parseInt(this.value);
+      const key = `${i}-${selectedMapIndex}`;
+      const similarityValue = similarityDictionary[key]
+      console.log(`Comparing map ${i + 1} with map ${selectedMapIndex + 1}`);
+      alert(`Similarity between Map ${i + 1} and Map ${selectedMapIndex + 1}: ${similarityValue}`);
+    });
+
+    //Drawing the maps one by one based on partition attribute name
+    //!!change the name of attribute!!//
+    d3.json(mapFiles[i]).then(geoJsonData => {
+      const partitionAttribute = i == 0 ? "leidenpart" : "louvainpar";
+      drawMap(mapId, geoJsonData, partitionAttribute, colorScale);
+      //append description for each map
+      const descriptionFilename = descriptionFiles[i];
+      loadDescription(descriptionFilename, mapContainer);
+      });
+    }
+
+</script>
+</body>
+</html>

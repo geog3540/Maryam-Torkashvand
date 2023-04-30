@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Community Detection Maps</title>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <style>
+  .map {
+    display: inline-block;
+    border: 1px solid black;
+  }
+  </style>
+</head>
+<body>
+  <svg id="map1" class="map" width="960" height="600"></svg>
+  <svg id="map2" class="map" width="960" height="600"></svg>
+  <script>
+
+  function jaccardSimilarity(nodeCommunities1, nodeCommunities2) {
+    const communitiesSet1 = new Set(nodeCommunities1);
+    const communitiesSet2 = new Set(nodeCommunities2);
+    const intersection = new Set([...communitiesSet1].filter(x => communitiesSet2.has(x)));
+    const union = new Set([...communitiesSet1, ...communitiesSet2]);
+    return intersection.size / union.size;
+  }
+
+
+  // Function to draw the map
+  function drawMap(svgId, geoJsonData, partitionAttribute1, partitionAttribute2, colorScale) {
+    // Create a path generator with a default projection
+    var path = d3.geoPath();
+
+    // Select the SVG element and set its size
+    var svg = d3.select("#" + svgId)
+    .attr("width", 960)
+    .attr("height", 600);
+
+    // Draw the map
+    svg.append("g")
+    .selectAll("path")
+    .data(geoJsonData.features)
+    .join("path")
+    .attr("d", path)
+    .attr("fill", function(d) {
+      const similarity = jaccardSimilarity(d.properties[partitionAttribute1], d.properties[partitionAttribute2]);
+      return colorScale(similarity);
+    })
+    .attr("stroke", "white")
+    .attr("stroke-width", 1);
+  }
+
+
+  var polygonJSONFile1 = "data/louvain.geojson";
+  d3.json(polygonJSONFile1, function (error, community1) {
+    if (error) throw error;
+
+    var polygonJSONFile2 = "data/leiden.geojson";
+    d3.json(polygonJSONFile2, function (error, community2) {
+      if (error) throw error;
+
+      const partitions1 = community1.features.map(feature => feature.properties.leidenpart);
+      const partitions2 = community2.features.map(feature => feature.properties.louvainpar);
+      const similarity = pairCountingSimilarity(partitions1, partitions2);
+      const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
+      // Draw the maps
+      drawMap("map1", community1, "leidenpart", "louvainpar", colorScale);
+      drawMap("map2", community2, "leidenpart", "louvainpar", colorScale);
+
+
+      console.log("Pair counting similarity:", similarity);
+    });
+  });
+  </script>
+</body>
+</html>
