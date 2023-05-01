@@ -212,8 +212,8 @@ function pairCountingSimilarity(communities1, communities2) {
     }
 
   //definning colorscheme
-  //const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
-  const colorScale = ["#7fc97f","#beaed4","#fdc086","#ffff99","#386cb0","#f0027f","#bf5b17"]
+  const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+  //const colorScale = ["#7fc97f","#beaed4","#fdc086","#ffff99","#386cb0","#f0027f","#bf5b17"]
 
   // List of GeoJSON file paths. this list store the maps geojson files
   const mapFiles = [
