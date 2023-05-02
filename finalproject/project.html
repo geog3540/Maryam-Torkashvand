@@ -234,7 +234,7 @@ function pairCountingSimilarity(communities1, communities2) {
     //for all communities from files fill the dict by key:index of two maps and value:similarity
     for (let i = 0; i < communities.length; i++) {
       for (let j = i + 1; j < communities.length; j++) {
-        const key = `${i}-${j}`;
+        const key = `${i+1}-${j+1}`;
         const similarityScore = pairCountingSimilarity(communities[i], communities[j]);
         similarityDict[key] = similarityScore;
       }
