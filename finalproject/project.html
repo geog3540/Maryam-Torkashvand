@@ -97,6 +97,10 @@
       margin: 5px;
     }
 
+    .container p{
+      margin: 5px;
+    }
+
   /* Style for project description */
   .description {
     background-color: #f5f5f5;
@@ -174,7 +178,7 @@
 <body>
   <div class="container custom-container">
   <header class="header">
-    <h1>Migration Structures in United States (1910-1920)</h1>
+    <h1>Migration Structures in United States (1850-1920)</h1>
     <ul class="nav">
       <li><a href="../index.html">Portfolio</a></li>
       <li><a href="https://observablehq.com/d/c0e6965383c173ba">Project</a></li>
@@ -187,9 +191,9 @@
 
   <div class="navbar">
     <a href="#" id="intro">Introduction</a>
-    <a href="#" id ="story">Story</a>
-    <a href="#">Data</a>
-    <a href="#">Usability Map</a>
+    <a href="#" id ="goal">Goals</a>
+    <a href="#" id = "data">Data</a>
+    <a href="#"id= "usability">Usability survey</a>
   </div>
 
   <div class="description-box" id="intro-description">
@@ -197,22 +201,38 @@
     <p>As an example of geographical regionalization, identifying migration regions is one of the growing areas of study among geographers. Ideally, a system of migration regions can be defined as follows:</p>
     <p>    "Groups of administrative units with the maximum internal interaction and a minimum flow across the migration-defining boundaries (Ng, R.C.Y., 1969)."</p>
     <p>The structures and processes responsible for the formation of regions are not randomly dispersed across the Earth's surface (Duckham et al. 2003). Distance plays a significant role in migration structures, especially on the national scale. However, other factors such as kinship or friendship ties and historical events like Cold War and the Gold rush in the United States also have a significant impact on forming the migration structure in the US over the settlement period. During the nineteenth century, the United States experienced a significant degree of population mobility, as individuals often traveled extensive distances due to the westward progression of European settlement.</p>
+    <p>To better understand the structure of migration and its evolution over time, we can map migration regions on a large spatiotemporal scale. Studying migration regions through time can tell us how people settled in the United States, what was the structure of flows, and what they can tell us about current social and cultural structures.</p>
   </div>
 
-  <div class="description-box" id="story-description">
-    <p>This is the home description. You can add any content you'd like here.</p>
+  <div class="description-box" id="goal-description">
+    <h4>Project Goals</h4>
+    <p>The aim of this project is to obtain and visualize the migration regions using migration networks from two large multi-generational datasets, Family tree dataset and Multigenerational longitudinal panel (MLP). For this purpose, I plan to use two network community detection algorithm, Louvain and Leiden. By extracting migration regions over time, we can understand the structure of migrations and mobility of people between 1850 and 1920, which occurred between geographically distant places because of their strong migration ties among each other. Moreover, Mapping long-term changes in interstate historical migration flows in the U.S. can tell us about the present cultural and social structures in the country.</p>
+    <p>I aimed to create a straightforward visualization tool to cater to anyone involved in regionalization studies, enabling effortless map imports and offering comparative visualizations with both visual and statistical analysis options.</p>
+  </div>
+
+  <div class="description-box" id="data-description">
+    <h4>Data</h4>
+    <p>For mapping migration regions, I use extracted migrations networks from the family tree dataset, which has been developed by Koylu et al. (2021). The family tree is a network of family members stretching over many generations, containing approximately 40 million individuals. Migration networks are those networks in which the nodes are the states of the US, and edges are the volume of families who moved between states. Using migration networks, including origin, destination, and the volume of families who migrate between states in different intervals and applying the Leiden algorithm, the regions (communities) for each network can be obtained.</p>
+  </div>
+
+  <div class="description-box" id="usability-description">
+    <h4>Usability survey</h4>
+    <p>By participating in the usability survey, you will help me understand the strengths and limitations of regionalization mapping and representation techniques. Refer to the 'How to use the maps' section for guidance on utilizing the maps. For further information about the project, its objectives, and the data, please explore the preceding sections.</p>
+    <li><a href="https://forms.gle/892KRyKfTYCp7TLD7" target="_blank">click here to start the survey</a></li>
   </div>
 
 
   <!-- Page Content -->
   <div class="container my-5">
-    <h1 class="text-center">Migration Structures in the United States (1910-1920)</h1>
         <div class="card">
           <div class="card-header">
-            How to use the maps
+            <h4>How to use the maps</h4>
           </div>
           <div class="card-body">
-            <p>Mapping migration regions using two network community detection algorithms. The visualization method employed ensures consistency by maintaining the same color for each region across both maps, allowing for easier comparison and interpretation</p>
+            <p>I aimed to create a straightforward visualization tool to cater to anyone involved in regionalization studies, enabling effortless map imports and offering comparative visualizations with both visual and statistical analysis options.</p>
+            <p>The following maps depict migration regions across different time intervals using two network community detection algorithms, Louvain and Leiden. The time intervals are decennial, spanning from 1850 to 1920. Each map is color-coded based on the partition attribute derived from the community detection algorithm.</p>
+            <p>These regions represent highly interconnected states in terms of the volume of migrating families during each period. The primary goal is to facilitate comparisons of the evolution of migration region structures over time.</p>
+            <p>Accompanying each map is a description that includes the modularity, the number of regions, and a brief overview of the map. Additionally, a comparison option is available for each map, enabling the calculation of pairwise counting similarity between two maps, which is then displayed in a pop-up window. Please note that if the similarity appears as "undefined," try reversing the comparison (e.g., if Map 1 with Map 2 is undefined, then attempt Map 2 with Map 1).</p>
           </div>
         </div>
       </div>
@@ -246,9 +266,21 @@ $('#intro').on('click', function (event) {
   descriptionBox.toggle();
 });
 
-$('#story').on('click', function (event) {
+$('#goal').on('click', function (event) {
   event.preventDefault();
-  const descriptionBox = $('#story-description');
+  const descriptionBox = $('#goal-description');
+  descriptionBox.toggle();
+});
+
+$('#data').on('click', function (event) {
+  event.preventDefault();
+  const descriptionBox = $('#data-description');
+  descriptionBox.toggle();
+});
+
+$('#usability').on('click', function (event) {
+  event.preventDefault();
+  const descriptionBox = $('#usability-description');
   descriptionBox.toggle();
 });
 
