@@ -21,7 +21,8 @@
 <!-- Latest compiled JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-
+  <!--jquery library for adding description boxes for introductions-->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <!--loading d3-->
   <script src="https://d3js.org/d3.v6.min.js"></script>
@@ -66,19 +67,35 @@
 
   .navbar {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 60px;
-    padding: 0 20px;
-    background-color: lightgray;
-    position: relative;
+    justify-content: space-around;
+    background-color: #333;
+    padding: 10px;
   }
 
   .navbar a {
-    color: black;
+    color: white;
     text-decoration: none;
-    margin-right: 20px;
+    padding: 8px 16px;
   }
+
+  .navbar a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+
+  .description-box {
+      display: none;
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #f2f2f2;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      text-align: justify;
+    }
+
+    .description-box p {
+      margin: 5px;
+    }
 
   /* Style for project description */
   .description {
@@ -169,10 +186,21 @@
 
 
   <div class="navbar">
-    <a href="#">Home</a>
-    <a href="#">Story</a>
+    <a href="#" id="intro">Introduction</a>
+    <a href="#" id ="story">Story</a>
     <a href="#">Data</a>
     <a href="#">Usability Map</a>
+  </div>
+
+  <div class="description-box" id="intro-description">
+    <h4>Introduction</h4>
+    <p>As an example of geographical regionalization, identifying migration regions is one of the growing areas of study among geographers. Ideally, a system of migration regions can be defined as follows:</p>
+    <p>    "Groups of administrative units with the maximum internal interaction and a minimum flow across the migration-defining boundaries (Ng, R.C.Y., 1969)."</p>
+    <p>The structures and processes responsible for the formation of regions are not randomly dispersed across the Earth's surface (Duckham et al. 2003). Distance plays a significant role in migration structures, especially on the national scale. However, other factors such as kinship or friendship ties and historical events like Cold War and the Gold rush in the United States also have a significant impact on forming the migration structure in the US over the settlement period. During the nineteenth century, the United States experienced a significant degree of population mobility, as individuals often traveled extensive distances due to the westward progression of European settlement.</p>
+  </div>
+
+  <div class="description-box" id="story-description">
+    <p>This is the home description. You can add any content you'd like here.</p>
   </div>
 
 
@@ -210,6 +238,19 @@
 
 <!--Definnig functions and variables inside script. everything we want to append pr all functions are defined inside script-->
 <script>
+
+//efining the descriptions for introduction and goals
+$('#intro').on('click', function (event) {
+  event.preventDefault();
+  const descriptionBox = $('#intro-description');
+  descriptionBox.toggle();
+});
+
+$('#story').on('click', function (event) {
+  event.preventDefault();
+  const descriptionBox = $('#story-description');
+  descriptionBox.toggle();
+});
 
 //a function that extracts communities from geojson files and make an array
 //each element of this array is a community of each maps
