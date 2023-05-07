@@ -1,10 +1,10 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
 <qgis version="3.30.0-'s-Hertogenbosch">
-  <identifier>leiden1900_1910</identifier>
+  <identifier>leiden1870_1880</identifier>
   <parentidentifier></parentidentifier>
   <language>ENG</language>
   <type>dataset</type>
-  <title>leiden1900_1910</title>
+  <title>leiden1870_1880</title>
   <abstract></abstract>
   <links/>
   <dates/>

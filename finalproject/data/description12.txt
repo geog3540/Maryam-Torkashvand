@@ -1,0 +1,2 @@
+Modularity: 0.344
+Number of Partitions: 5

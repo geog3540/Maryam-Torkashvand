@@ -295,7 +295,7 @@ async function getCommunitiesFromGeoJSON(filePaths) {
   for (const filePath of filePaths) {
     const response = await fetch(filePath);
     const geoJsonData = await response.json();
-    const community = geoJsonData.features.map(feature => feature.properties.region);
+    const community = geoJsonData.features.map(feature => feature.properties.partition);
     communities.push(community);
   }
 
@@ -304,9 +304,9 @@ async function getCommunitiesFromGeoJSON(filePaths) {
 
 //this function calculate the paircointing similarity between maps
 function pairCountingSimilarity(communities1, communities2) {
-  if (communities1.length !== communities2.length) {
-    throw new Error("Input arrays must have the same length");
-  }
+  //if (communities1.length !== communities2.length) {
+  //  throw new Error("Input arrays must have the same length");
+  //}
 
   //initialize the variables
   let matches = 0;
@@ -365,8 +365,9 @@ function pairCountingSimilarity(communities1, communities2) {
   // List of GeoJSON file paths. this list store the maps geojson files
   const mapFiles = [
     "data/Louvain1870_1880.geojson",
-    "data/Louvain1900_19101.geojson",
+    "data/louvain1900_1910.geojson",
     "data/louvain1910_1920.geojson",
+    "data/Louvain1870_1880.geojson",
     "data/leiden1900_1910.geojson",
     "data/leiden1910_1920.geojson"
 
@@ -401,19 +402,20 @@ function pairCountingSimilarity(communities1, communities2) {
   //!!add text files for all maps and name of them must be "description[i]"
   const mapTitles = [
   "Map 1: Louvain 1870-1880",
-  "Map 1: Louvain 1900-1910",
-  "Map 2: Louvain 1910-1920",
-  "Map 3: Leiden 1900-1910",
-  "Map 4: Leiden 1910-1920",
-  "Map 5: Leiden 1910-1910"
+  "Map 2: Louvain 1900-1910",
+  "Map 3: Louvain 1910-1920",
+  "Map 4: Leiden 1870-1880",
+  "Map 5: Leiden 1900-1910",
+  "Map 6: Leiden 1910-1920"
   ];
 
   const descriptionFiles = [
-    "data/description1.txt",
-    "data/description2.txt",
-    "data/description3.txt",
-    "data/description4.txt",
-    "data/description5.txt"
+  "data/description12.txt",
+  "data/description21.txt",
+  "data/description3.txt",
+  "data/description42.txt",
+  "data/description41.txt",
+  "data/description45.txt"
   ];
 
   //this code make an access to each mapgrid, so we cam manupulate interval
@@ -423,7 +425,7 @@ function pairCountingSimilarity(communities1, communities2) {
   //This function read and load the text files and format it to paragraph
   function loadDescription(filename, mapContainer) {
     d3.text(filename).then(function (text) {
-      const paragraphs = text.split("\n\n");
+      const paragraphs = text.split("\n");
       const descriptionContainer = mapContainer.append("div")
         .attr("class", "map-description-container");
       paragraphs.forEach(function (paragraph) {
@@ -472,16 +474,16 @@ function pairCountingSimilarity(communities1, communities2) {
     //then define an alert window that shows the similarity between the map and selected option
     dropdown.on("change", function () {
       const selectedMapIndex = parseInt(this.value);
-      const key = `${i}-${selectedMapIndex}`;
+      const key = `${i+1}-${selectedMapIndex}`;
       const similarityValue = similarityDictionary[key]
-      console.log(`Comparing map ${i + 1} with map ${selectedMapIndex + 1}`);
-      alert(`Similarity between Map ${i + 1} and Map ${selectedMapIndex + 1}: ${similarityValue}`);
+      console.log(`Comparing map ${i+1} with map ${selectedMapIndex + 1}`);
+      alert(`Similarity between Map ${i+1} and Map ${selectedMapIndex + 1}: ${similarityValue}`);
     });
 
     //Drawing the maps one by one based on partition attribute name
     //!!change the name of attribute!!//
     d3.json(mapFiles[i]).then(geoJsonData => {
-      const partitionAttribute = "region";
+      const partitionAttribute = "partition";
       const ID = "STATE_NAME"
       drawMap(mapId, geoJsonData, partitionAttribute, colorScale, ID);
       //append description for each map
