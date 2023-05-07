@@ -1,10 +1,10 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
 <qgis version="3.30.0-'s-Hertogenbosch">
-  <identifier>louvain1870_1880</identifier>
+  <identifier>louvain18701880</identifier>
   <parentidentifier></parentidentifier>
   <language>ENG</language>
   <type>dataset</type>
-  <title>louvain1870_1880</title>
+  <title>louvain18701880</title>
   <abstract></abstract>
   <links/>
   <dates/>
