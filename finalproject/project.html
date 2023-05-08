@@ -220,7 +220,6 @@
     <li><a href="https://forms.gle/892KRyKfTYCp7TLD7" target="_blank">click here to start the survey</a></li>
   </div>
 
-
   <!-- Page Content -->
   <div class="container my-5">
         <div class="card">
@@ -236,10 +235,10 @@
         </div>
       </div>
     </div>
-  </div>
+
+
 
   <!--Map Grid: Maps are shown here-->
-
   <div class = "container">
     <div clas = "map-grid-container map-fixed-size">
       <div class="row">
@@ -248,8 +247,6 @@
       </div>
     </div>
   </div>
-
-
 
   <footer class="footer">
     Copyright &copy; Maryam Torkashvand 2023
@@ -345,8 +342,8 @@ function pairCountingSimilarity(communities1, communities2) {
     .join("path")
     .attr("d", path)
     .attr("fill", d => colorScale(d.properties[partitionAttribute]))
-    .attr("stroke", "white")
-    .attr("stroke-width", 1)
+    .attr("stroke", "gray")
+    .attr("stroke-width", 0.5)
     .on("mouseover", function (event, d) {
       d3.select(this)
       .append("title")
@@ -356,11 +353,30 @@ function pairCountingSimilarity(communities1, communities2) {
       d3.select(this)
       .selectAll("title")
       .remove();;
-      })
+    });
+
+    // Draw the legend
+    const legend = svg.append("g")
+        .attr("transform", `translate(${width - 400}, ${height - 50})`);
+
+    const legendData = colorScale.domain().map(value => ({
+        value,
+        color: colorScale(value),
+    }))
+
     }
 
+    // Define a fixed domain with the attribute values you want to have consistent colors
+    const fixedDomain = ["0", "1", "2", "3", "4"];
+
+    // Create a color scale with a fixed domain and a range of colors
+    const colorScale = d3.scaleOrdinal()
+    .domain(fixedDomain)
+    //.range(["#fbb4ae", "#b3cde3", "#decbe4", "#b3e2cd", "#f1e2cc"]);
+    .range(["#8dd3c7", "#bebada", "#fb8072", "#80b1d3", "#fdb462"]);
+
   //definning colorscheme
-  const colorScale = d3.scaleOrdinal(["#4e79a7","#f28e2c","#76b7b2","#59a14f","#af7aa1","#ff9da7","#9c755f","#bab0ab"]);
+  //const colorScale = d3.scaleOrdinal(["#fbb4ae","#b3cde3","#decbe4","#b3e2cd","#f1e2cc"]);
 
   // List of GeoJSON file paths. this list store the maps geojson files
   const mapFiles = [
@@ -439,7 +455,6 @@ function pairCountingSimilarity(communities1, communities2) {
 /////////////////////////////////////////////////////////////////////////////////
   //Now definning a foe loop that define attributes for all elemets of each Grid
   //and draw maps, discription, compare bottom in each grid
-
   for (let i = 0; i < mapFiles.length; i++) {
     const mapId = "map" + i;
     const mapContainer = d3.select("#mapGrid")
