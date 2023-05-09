@@ -227,10 +227,11 @@
             <h4>How to use the maps</h4>
           </div>
           <div class="card-body">
-            <p>I aimed to create a straightforward visualization tool to cater to anyone involved in regionalization studies, enabling effortless map imports and offering comparative visualizations with both visual and statistical analysis options.</p>
-            <p>The following maps depict migration regions across different time intervals using two network community detection algorithms, Louvain and Leiden. The time intervals are decennial, spanning from 1870 to 1920. Each map is color-coded based on the partition attribute derived from the community detection algorithm. When you hover over a specific location on the map, you can see which region each state is situated in.</p>
-            <p>These regions represent highly interconnected states in terms of the volume of migrating families during each period. The primary goal is to facilitate comparisons of the evolution of migration region structures over time.</p>
-            <p>Accompanying each map is a description that includes the modularity, the number of regions, and a brief overview of the map. Additionally, a comparison option is available for each map, enabling the calculation of pairwise counting similarity between two maps, which is then displayed in a pop-up window. Please note that if the similarity appears as "undefined," try reversing the comparison (e.g., if Map 1 with Map 2 is undefined, then attempt Map 2 with Map 1).</p>
+            <p>The colors on the maps represent states with strong migration connections. States with the same color have more migration flows between them, both in terms of numbers and magnitude. Each color represents a "migration region". </p>
+            <p>The goal is to observe changes in migration region structures over time and compare two methods used to identify these regions.</p>
+            <p>The first row of maps shows regions found using Method 1 (<a href="https://doi.org/10.1088/1742-5468/2008/10/P10008" target="_blank">Louvain community detection algorithm</a>), while the second row displays regions from Method 2 (<a href="https://doi.org/10.1038/s41598-019-41695-z" target="_blank">Leiden community detection algorithm</a>).</p>
+            <p>You can compare maps using a feature that calculates their <a href= "https://en.wikipedia.org/wiki/Similarity_(network_science)#:~:text=Similarity%20in%20network%20analysis%20occurs,automorphic%20equivalence%2C%20and%20regular%20equivalence." target= "_blank"> similarity </a>, shown in a pop-up window. If the similarity appears as "undefined," try reversing the comparison (e.g., if Map 1 with Map 2 is undefined, then attempt Map 2 with Map 1).</p>
+            <p>Hover over in the maps to see each state and its assigned region number </p>
           </div>
         </div>
       </div>
@@ -416,12 +417,12 @@ function pairCountingSimilarity(communities1, communities2) {
   //like madularity, number of regions and a brief description
   //!!add text files for all maps and name of them must be "description[i]"
   const mapTitles = [
-  "Map 1: Louvain 1870-1880",
-  "Map 2: Louvain 1900-1910",
-  "Map 3: Louvain 1910-1920",
-  "Map 4: Leiden 1870-1880",
-  "Map 5: Leiden 1900-1910",
-  "Map 6: Leiden 1910-1920"
+  "Map 1: <span style='font-size: 0.8em;'>Method #1</span>  1870-1880",
+  "Map 2: <span style='font-size: 0.8em;'>Method #1</span>  1900-1910",
+  "Map 3: <span style='font-size: 0.8em;'>Method #1</span>  1910-1920",
+  "Map 4: <span style='font-size: 0.8em;'>Method #2</span>  1870-1880",
+  "Map 5: <span style='font-size: 0.8em;'>Method #2</span>  1900-1910",
+  "Map 6: <span style='font-size: 0.8em;'>Method #2</span>  1910-1920"
   ];
 
   const descriptionFiles = [
