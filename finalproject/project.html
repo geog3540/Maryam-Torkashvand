@@ -227,12 +227,11 @@
             <h4>How to use the maps</h4>
           </div>
           <div class="card-body">
-            <p>The colors on the maps represent states with strong migration connections. States with the same color have more migration flows between them, both in terms of numbers and magnitude. Each color represents a "migration region". </p>
-            <p>The goal is to observe changes in migration region structures over time and compare two methods used to identify these regions.</p>
-            <p>The first row of maps shows regions found using Method 1 (<a href="https://doi.org/10.1088/1742-5468/2008/10/P10008" target="_blank">Louvain community detection algorithm</a>), while the second row displays regions from Method 2 (<a href="https://doi.org/10.1038/s41598-019-41695-z" target="_blank">Leiden community detection algorithm</a>).</p>
-            <p>You can compare maps using a feature that calculates their <a href= "https://en.wikipedia.org/wiki/Similarity_(network_science)#:~:text=Similarity%20in%20network%20analysis%20occurs,automorphic%20equivalence%2C%20and%20regular%20equivalence." target= "_blank"> similarity </a>, shown in a pop-up window. If the similarity appears as "undefined," try reversing the comparison (e.g., if Map 1 with Map 2 is undefined, then attempt Map 2 with Map 1).</p>
-            <p>Hover over in the maps to see each state and its assigned region number </p>
-            <p> </p>
+            <li>The colors on the maps represent states with strong migration connections. States with the same color have more migration flows between them, both in terms of numbers and magnitude. Each color represents a "migration region". </li>
+            <li>The goal is to observe changes in migration region structures over time and compare two methods used to identify these regions.</p>
+            <li>The first row of maps shows regions found using Method #1 (<a href="https://doi.org/10.1088/1742-5468/2008/10/P10008" target="_blank">Louvain community detection algorithm</a>), while the second row displays regions from Method #2 (<a href="https://doi.org/10.1038/s41598-019-41695-z" target="_blank">Leiden community detection algorithm</a>).</li>
+            <li>You can compare maps using a feature that calculates their <a href= "https://en.wikipedia.org/wiki/Similarity_(network_science)#:~:text=Similarity%20in%20network%20analysis%20occurs,automorphic%20equivalence%2C%20and%20regular%20equivalence." target= "_blank"> similarity </a>, shown in a pop-up window. If the similarity appears as "undefined," try reversing the comparison (e.g., if Map 1 with Map 2 is undefined, then attempt Map 2 with Map 1).</li>
+            <li>Hover over in the maps to see each state and its assigned region number </li>
             <ul style="font-size: 0.9em;">
               <li>
                 <a href="https://doi.org/10.1088/1742-5468/2008/10/P10008" target="_blank">Modularity</a> is a measure of the structure of networks or graphs which measures the strength of division of a network into groups.
@@ -423,12 +422,12 @@ function pairCountingSimilarity(communities1, communities2) {
   //like madularity, number of regions and a brief description
   //!!add text files for all maps and name of them must be "description[i]"
   const mapTitles = [
-  "Map 1: <span style='font-size: 0.8em;'>Method #1</span>  1870-1880",
-  "Map 2: <span style='font-size: 0.8em;'>Method #1</span>  1900-1910",
-  "Map 3: <span style='font-size: 0.8em;'>Method #1</span>  1910-1920",
-  "Map 4: <span style='font-size: 0.8em;'>Method #2</span>  1870-1880",
-  "Map 5: <span style='font-size: 0.8em;'>Method #2</span>  1900-1910",
-  "Map 6: <span style='font-size: 0.8em;'>Method #2</span>  1910-1920"
+  "Map 1: 1870-1880 <br><span style='font-size: 0.5em;'>Method #1</span>",
+  "Map 2: 1900-1910 <br><span style='font-size: 0.5em;'>Method #1</span>",
+  "Map 3: 1910-1920 <br><span style='font-size: 0.5em;'>Method #1</span>",
+  "Map 4: 1870-1880 <br><span style='font-size: 0.5em;'>Method #2</span>",
+  "Map 5: 1900-1910 <br><span style='font-size: 0.5em;'>Method #2</span>",
+  "Map 6: 1910-1920 <br><span style='font-size: 0.5em;'>Method #2</span>"
   ];
 
   const descriptionFiles = [
@@ -470,7 +469,7 @@ function pairCountingSimilarity(communities1, communities2) {
 
     mapContainer.append("h3")
     .attr("class", "map-title")
-    .text(mapTitles[i]);
+    .html(mapTitles[i]);
 
     mapContainer.append("div")
     .attr("id", mapId)
