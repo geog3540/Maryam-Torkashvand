@@ -246,6 +246,7 @@
     <div clas = "map-grid-container map-fixed-size">
       <div class="row">
         <div id="mapGrid" class="row">
+          <div id="info"></div>
         </div>
       </div>
     </div>
@@ -327,6 +328,8 @@ function pairCountingSimilarity(communities1, communities2) {
   return matches / totalPairs;
 }
 
+let activeState = null;
+
   // this function draw all maps in a specific size and put them in the grid
   function drawMap(mapId, geoJsonData, partitionAttribute, colorScale, ID) {
     const width = 400;
@@ -347,15 +350,22 @@ function pairCountingSimilarity(communities1, communities2) {
     .attr("fill", d => colorScale(d.properties[partitionAttribute]))
     .attr("stroke", "gray")
     .attr("stroke-width", 0.5)
+    .attr("class", d => `mapPath state-${d.properties[ID].replace(/\s+/g, '-')}`)
     .on("mouseover", function (event, d) {
-      d3.select(this)
+      activeState = d.properties[ID];
+      d3.selectAll(".state-" + activeState.replace(/\s+/g, '-'))
+      .attr("stroke", "black")
+      .style("stroke-width", "3")
       .append("title")
       .text(`State: ${d.properties[ID]}, Region: ${d.properties[partitionAttribute]}`);
     })
     .on("mouseout", function () {
-      d3.select(this)
+      d3.selectAll(".state-" + activeState.replace(/\s+/g, '-'))
+      .attr("stroke", "gray")
+      .style("stroke-width", "0.5")
       .selectAll("title")
-      .remove();;
+      .remove();
+      activeState = null;
     });
 
     // Draw the legend
