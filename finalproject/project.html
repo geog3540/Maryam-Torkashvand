@@ -136,7 +136,7 @@
   .map-title{
     font-weight: bold;
     text-align: center;
-    margin-bottom: 0;
+    margin-bottom: 2px;
     padding: 10px;
   }
   /*style for compre drop down bottom*/
@@ -158,6 +158,7 @@
   .map-description {
     margin-bottom: 10px;
   }
+
 
   /* style for footer */
   .footer {
@@ -382,12 +383,12 @@ function pairCountingSimilarity(communities1, communities2) {
 
   // List of GeoJSON file paths. this list store the maps geojson files
   const mapFiles = [
-    "data/louvain18701880.geojson",
-    "data/louvain19001910.geojson",
-    "data/louvain1910_1920.geojson",
-    "data/leiden18701880.geojson",
-    "data/leiden1900_1910.geojson",
-    "data/leiden1910_1920.geojson"
+    "geojsonfiles/louvainnew1870-80.geojson",
+    "geojsonfiles/louvainnew1900-10.geojson",
+    "geojsonfiles/louvainnew1910-20.geojson",
+    "geojsonfiles/leidennew1870-80.geojson",
+    "geojsonfiles/leidennew1900-10.geojson",
+    "geojsonfiles/leidennew1910-20.geojson"
   ];
 
   //initialling a dictionary that stores all similarity values beetween all map pairs
