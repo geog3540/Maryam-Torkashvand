@@ -123,6 +123,17 @@
     zoom: 1;
   }
 
+  .text-box {
+    border: 1px solid #000;
+    width: 1200px;
+    height: 100px;
+    padding: 20px;
+    margin-left: 135px;
+    margin-bottom: 20px;
+    margin-top: 0px;
+
+  }
+
   /*defining style and size for map containers, so we can have map grid*/
   .map-container {
     position: relative;
@@ -239,6 +250,10 @@
       </div>
     </div>
 
+  <div class = "text-box">
+      <p>Similarity </p>
+  </div>
+
 
 
   <!--Map Grid: Maps are shown here-->
@@ -304,18 +319,22 @@ async function getCommunitiesFromGeoJSON(filePaths) {
 }
 
 //this function calculate the paircointing similarity between maps
+let errors = []
 function pairCountingSimilarity(communities1, communities2) {
-  //if (communities1.length !== communities2.length) {
-  //  throw new Error("Input arrays must have the same length");
-  //}
+  let minLength = Math.min(communities1.length, communities2.length);
+  if (communities1.length !== communities2.length) {
+    console.log('Error encountered in pairCountingSimilarity');
+    errors.push(new Error("Input arrays must have the same length"));
+    return 0.000000;
+  }
 
   //initialize the variables
   let matches = 0;
   let totalPairs = 0;
 
   //define the unique pairs of nodes (0,1),(0,2), ... (n-1,n)
-  for (let i = 0; i < communities1.length; i++) {
-    for (let j = i + 1; j < communities1.length; j++) {
+  for (let i = 0; i <  minLength; i++) {
+    for (let j = i + 1; j <  minLength; j++) {
       totalPairs++;
 
       //chech whether those pairs that are in a same community in network 1 also are the same community in network 2
@@ -418,6 +437,7 @@ let activeState = null;
       for (let j = i + 1; j < communities.length; j++) {
         const key = `${i+1}-${j+1}`;
         const similarityScore = pairCountingSimilarity(communities[i], communities[j]);
+
         similarityDict[key] = similarityScore;
       }
     }
@@ -491,8 +511,8 @@ let activeState = null;
     for (let j = 0; j < mapFiles.length; j++) {
       if (j !== i) {
         dropdown.append("option")
-        .attr("value", j)
-        .text("Compare with Map " + (j + 1));
+        .attr("value", j+1)
+        .text("Compare with Map " + (j+1));
       }
     }
 
@@ -503,8 +523,14 @@ let activeState = null;
       const selectedMapIndex = parseInt(this.value);
       const key = `${i+1}-${selectedMapIndex}`;
       const similarityValue = similarityDictionary[key]
-      console.log(`Comparing map ${i+1} with map ${selectedMapIndex + 1}`);
-      alert(`Similarity between Map ${i+1} and Map ${selectedMapIndex + 1}: ${similarityValue.toFixed(4)}`);
+      console.log(`Comparing map ${i+1} with map ${selectedMapIndex}`);
+      if (similarityValue !== 0) {
+        const similarityValueNumber = parseFloat(similarityValue);
+        alert(`Similarity between Map ${i+1} and Map ${selectedMapIndex}: ${similarityValue.toFixed(4)}`);
+      }
+      else {
+        alert(`Similarity between Map ${i+1} and Map ${selectedMapIndex}: not available`);
+  }
     });
 
     //Drawing the maps one by one based on partition attribute name
