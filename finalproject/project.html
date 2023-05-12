@@ -251,7 +251,7 @@
     </div>
 
   <div class = "text-box">
-      <p>Similarity </p>
+      <p>Similarity measurment  </p>
   </div>
 
 
@@ -508,13 +508,20 @@ let activeState = null;
 
     // for each drop down define options.
     // foe each map the options are all other maps (j !== i)
-    for (let j = 0; j < mapFiles.length; j++) {
+    for (let j = i+1; j < mapFiles.length; j++) {
       if (j !== i) {
         dropdown.append("option")
         .attr("value", j+1)
         .text("Compare with Map " + (j+1));
       }
+      if (i === 4) {
+        dropdown.append("option")
+        .attr("value", "extra")
+        .text("");
+      }
     }
+
+    dropdown.node().dispatchEvent(new Event("change"));
 
     // definnig the drop down functionality
     //first defining key and value variables from similarity dictionary
@@ -530,8 +537,9 @@ let activeState = null;
       }
       else {
         alert(`Similarity between Map ${i+1} and Map ${selectedMapIndex}: not available`);
-  }
+      }
     });
+
 
     //Drawing the maps one by one based on partition attribute name
     //!!change the name of attribute!!//
