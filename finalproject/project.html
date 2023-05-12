@@ -126,12 +126,15 @@
   .text-box {
     border: 1px solid #000;
     width: 1200px;
-    height: 100px;
+    height: 280px;
     padding: 20px;
     margin-left: 135px;
     margin-bottom: 20px;
     margin-top: 0px;
+  }
 
+  .text-box p{
+    margin: 0pt;
   }
 
   /*defining style and size for map containers, so we can have map grid*/
@@ -237,10 +240,10 @@
             <h4>How to use the maps</h4>
           </div>
           <div class="card-body">
-            <li>The colors on the maps represent states with strong migration connections. States with the same color have more migration flows between them, both in terms of numbers and magnitude. Each color represents a "migration region". </li>
+            <li>The colors on the maps represent states with strong migration connections. States with the same color have more migration flows between them, both in terms of numbers and magnitude. Each color represents a "Migration Region". </li>
             <li>The goal is to observe changes in migration region structures over time and compare two methods used to identify these regions.</p>
             <li>The first row of maps shows regions found using Method #1 (<a href="https://doi.org/10.1088/1742-5468/2008/10/P10008" target="_blank">Louvain community detection algorithm</a>), while the second row displays regions from Method #2 (<a href="https://doi.org/10.1038/s41598-019-41695-z" target="_blank">Leiden community detection algorithm</a>).</li>
-            <li>You can compare maps using a feature that calculates their <a href= "https://en.wikipedia.org/wiki/Similarity_(network_science)#:~:text=Similarity%20in%20network%20analysis%20occurs,automorphic%20equivalence%2C%20and%20regular%20equivalence." target= "_blank"> similarity </a>, shown in a pop-up window. If the similarity appears as "undefined," try reversing the comparison (e.g., if Map 1 with Map 2 is undefined, then attempt Map 2 with Map 1).</li>
+            <li>You can compare maps using a feature that calculates their <a href= "https://en.wikipedia.org/wiki/Similarity_(network_science)#:~:text=Similarity%20in%20network%20analysis%20occurs,automorphic%20equivalence%2C%20and%20regular%20equivalence." target= "_blank"> similarity </a>, shown in a pop-up window. Please note, this measure is applicable only when comparing two maps with an equal number of states.</li>
             <li>Hover over in the maps to see each state and its assigned region number. (It's a bit slow!🙂) </li>
               <li>
                 <a href="https://doi.org/10.1088/1742-5468/2008/10/P10008" target="_blank">Modularity</a> is a measure of the structure of networks or graphs which measures the strength of division of a network into groups.
@@ -251,7 +254,13 @@
     </div>
 
   <div class = "text-box">
-      <p>Similarity measurment  </p>
+      <li>What does "Similarity" mean?</li>
+      <p>"Similarity" refers to pairwise similarity, a simple metric used for comparing network structures. This metric works by counting all node pairs found in the same region on both maps, then dividing that number by the total count of pairs.</p>
+      <p>A higher similarity value indicates that the two maps are more alike in terms of migration regions, meaning more states are situated in the same region on both maps.</p>
+      <p>Similarity can only be computed for networks (or maps) that have an identical number of nodes (or states).</p>
+      <li>What does "Modularity" mean?</li>
+      <p>Modularity is a metric that evaluates the efficiency of a method in forming partitions within a specific network. A higher modularity score suggests that the states within one region have more interconnections in terms of migration.</p>
+      <p>It's important to note that modularity values are comparable when using the same method.</p>
   </div>
 
 
